@@ -16,7 +16,7 @@ import numpy as np
 # -----------------------------------------------
 
 def compute_output_size_1d(input_array, kernel_array):
-    pass
+    return len(input_array) - len(kernel_array) + 1
 
 
 # -----------------------------------------------
@@ -35,9 +35,11 @@ print(compute_output_size_1d(input_array, kernel_array))
 # -----------------------------------------------
 
 def convolve_1d(input_array, kernel_array):
-    # Tip: start by initializing an empty output array (you can use your function above to calculate the correct size).
-    # Then fill the cells in the array with a loop.
-    pass
+    output_array = np.zeros(compute_output_size_1d(input_array, kernel_array))
+    for i in range(len(output_array)):
+        input_window = input_array[i:i+len(kernel_array)]
+        output_array[i] = np.dot(input_window,kernel_array)
+    return output_array
 
 # -----------------------------------------------
 # Another tip: write test cases like this, so you can easily test your function.
@@ -56,8 +58,9 @@ print(convolve_1d(input_array, kernel_array))
 # -----------------------------------------------
 
 def compute_output_size_2d(input_matrix, kernel_matrix):
-    pass
-
+    input_height, input_width = input_matrix.shape
+    kernel_height, kernel_width = kernel_matrix.shape
+    return (input_height - kernel_height +1, input_width - kernel_width +1)
 
 # -----------------------------------------------
 
@@ -70,9 +73,14 @@ def compute_output_size_2d(input_matrix, kernel_matrix):
 # Your code here:
 # -----------------------------------------------
 def convolute_2d(input_matrix, kernel_matrix):
-    # Tip: same tips as above, but you might need a nested loop here in order to
-    # define which parts of the input matrix need to be multiplied with the kernel matrix.
-    pass
+    k_height, k_width = kernel_matrix.shape
+    output_height, output_width = compute_output_size_2d(input_matrix, kernel_matrix)
+    output_matrix = np.zeros((output_height, output_width))
+    for i in range(output_height):
+        for j in range(output_width):
+            input_window = input_matrix[i:i+k_height, j:j+k_width]
+            output_matrix[i,j] = np.sum(input_window * kernel_matrix)
+    return output_matrix
 
 
 # -----------------------------------------------
